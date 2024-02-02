@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDatabase, ref, set, push, onValue, remove } from "firebase/database";
+import { getDatabase, ref, set, push, onValue, remove, update } from "firebase/database";
 
 function App() {
   const db = getDatabase();
@@ -11,6 +11,8 @@ function App() {
     password: ""
   })
   let [information, setInformation] = useState([])
+  let [togglebtn, setTogglebtn] = useState(false);
+  let [userId, setUserId] = useState();
   let handleForm = (e) => {
     let { name, value } = e.target;
     setUser({ ...user, [name]: value })
@@ -46,13 +48,45 @@ function App() {
     });
   }, [])
 
-  console.log(information);
+  //console.log(information);
 
+  // delete Operation
   let handleDelete = (id) => {
     //console.log(id);
-    remove(ref(db,"allinformation/"+id)).then(()=>(
+    remove(ref(db, "allinformation/" + id)).then(() => (
       console.log("delete done")
     ))
+  }
+
+  // update Operation
+  let handleEdit = (item) => {
+    setUserId(item.id);
+    setUser({
+      name: item.information_user.name,
+      email: item.information_user.email,
+      phone: item.information_user.phone,
+      address: item.information_user.address,
+      password: item.information_user.password
+    })
+    setTogglebtn(true);
+  }
+
+  let handleUpdate = (e) => {
+    e.preventDefault();
+    // console.log(user);
+    // console.log(userId);
+    update(ref(db, "allinformation/" + userId), {
+      information_user: user,
+    }).then(() => {
+      setTogglebtn(false);
+      setUser({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        password: ""
+      })
+    })
   }
 
   return (
@@ -88,7 +122,12 @@ function App() {
               <label>Password</label>
               <i className='bx bxs-lock-alt' ></i>
             </div>
-            <button className="btn" onClick={handleSubmit}>Registration</button>
+            {
+              togglebtn
+                ? <button className="btn" onClick={handleUpdate}>Update</button>
+                :
+                <button className="btn" onClick={handleSubmit}>Registration</button>
+            }
           </form>
         </div>
         <div className="info-text register">
@@ -107,7 +146,7 @@ function App() {
                 <span>Email: {item.information_user.email}</span>
                 <span>Address: {item.information_user.address}</span>
                 <div className="user-actions">
-                  <button className="edit-btn">Edit</button>
+                  <button className="edit-btn" onClick={() => handleEdit(item)}>Edit</button>
                   <button className="delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
                 </div>
               </li>
