@@ -21,6 +21,13 @@ function App() {
     set(push(ref(db, "allinformation")), {
       information_user: user,
     })
+    setUser({
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      password: ""
+    })
   }
 
   //read data
@@ -57,27 +64,27 @@ function App() {
           <h2>Registration</h2>
           <form action="">
             <div className="input-box">
-              <input name='name' type="text" onChange={handleForm} required />
+              <input name='name' value={user.name} type="text" onChange={handleForm} required />
               <label>Name</label>
               <i className='bx bxs-user'></i>
             </div>
             <div className="input-box">
-              <input name='email' type="email" onChange={handleForm} required />
+              <input name='email' value={user.email} type="email" onChange={handleForm} required />
               <label>E-mail</label>
               <i className='bx bxs-envelope'></i>
             </div>
             <div className="input-box">
-              <input name='phone' type="phone" onChange={handleForm} required />
+              <input name='phone' value={user.phone} type="phone" onChange={handleForm} required />
               <label>Phone</label>
               <i className='bx bxs-phone-call'></i>
             </div>
             <div className="input-box">
-              <input name='address' type="text" onChange={handleForm} required />
+              <input name='address' value={user.address} type="text" onChange={handleForm} required />
               <label>Address</label>
               <i className='bx bxs-location-plus' ></i>
             </div>
             <div className="input-box">
-              <input name='password' type="password" onChange={handleForm} autoComplete='on' required />
+              <input name='password' value={user.password} type="password" onChange={handleForm} autoComplete='on' required />
               <label>Password</label>
               <i className='bx bxs-lock-alt' ></i>
             </div>
