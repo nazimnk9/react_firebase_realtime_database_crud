@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDatabase, ref, set, push, onValue } from "firebase/database";
+import { getDatabase, ref, set, push, onValue, remove } from "firebase/database";
 
 function App() {
   const db = getDatabase();
@@ -42,7 +42,10 @@ function App() {
   console.log(information);
 
   let handleDelete = (id) => {
-    console.log(id);
+    //console.log(id);
+    remove(ref(db,"allinformation/"+id)).then(()=>(
+      console.log("delete done")
+    ))
   }
 
   return (
@@ -74,7 +77,7 @@ function App() {
               <i className='bx bxs-location-plus' ></i>
             </div>
             <div className="input-box">
-              <input name='password' type="password" onChange={handleForm} required />
+              <input name='password' type="password" onChange={handleForm} autoComplete='on' required />
               <label>Password</label>
               <i className='bx bxs-lock-alt' ></i>
             </div>
@@ -86,19 +89,19 @@ function App() {
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
       </div>
-      <div class="user-list">
-        <div class="user-list-header">User List</div>
+      <div className="user-list">
+        <div className="user-list-header">User List</div>
         <ol>
           {
             information.map((item, index) => (
-              <li class="user-item" key={index}>
+              <li className="user-item" key={index}>
                 <span>Name: {item.information_user.name}</span>
                 <span>Phone: {item.information_user.phone}</span>
                 <span>Email: {item.information_user.email}</span>
                 <span>Address: {item.information_user.address}</span>
-                <div class="user-actions">
-                  <button class="edit-btn">Edit</button>
-                  <button class="delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
+                <div className="user-actions">
+                  <button className="edit-btn">Edit</button>
+                  <button className="delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
                 </div>
               </li>
             ))
