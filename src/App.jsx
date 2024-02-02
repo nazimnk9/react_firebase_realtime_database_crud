@@ -58,6 +58,12 @@ function App() {
     ))
   }
 
+  let handleAllDelete = () =>{
+    remove(ref(db, "allinformation")).then(() => (
+      console.log("delete All done")
+    ))
+  }
+
   // update Operation
   let handleEdit = (item) => {
     setUserId(item.id);
@@ -136,7 +142,10 @@ function App() {
         </div>
       </div>
       <div className="user-list">
-        <div className="user-list-header">User List</div>
+        <div className="user-list-header">User List
+          <button className="delete-btn" onClick={handleAllDelete}>Delete All</button>
+        </div>
+        
         <ol>
           {
             information.map((item, index) => (
