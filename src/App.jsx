@@ -1,5 +1,15 @@
-import { useEffect, useState } from 'react'
-import { getDatabase, ref, set, push, onValue, remove, update } from "firebase/database";
+import { useEffect, useState } from "react";
+import {
+  getDatabase,
+  ref,
+  set,
+  push,
+  onValue,
+  remove,
+  update,
+} from "firebase/database";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const db = getDatabase();
@@ -8,61 +18,79 @@ function App() {
     email: "",
     phone: "",
     address: "",
-    password: ""
-  })
-  let [information, setInformation] = useState([])
+    password: "",
+  });
+  let [information, setInformation] = useState([]);
   let [togglebtn, setTogglebtn] = useState(false);
   let [userId, setUserId] = useState();
   let handleForm = (e) => {
     let { name, value } = e.target;
-    setUser({ ...user, [name]: value })
-  }
+    setUser({ ...user, [name]: value });
+  };
   // write data
   let handleSubmit = (e) => {
     e.preventDefault();
     set(push(ref(db, "allinformation")), {
       information_user: user,
-    })
+    });
     setUser({
       name: "",
       email: "",
       phone: "",
       address: "",
-      password: ""
-    })
-  }
+      password: "",
+    });
+  };
 
   //read data
   useEffect(() => {
-    const informationRef = ref(db, 'allinformation');
+    const informationRef = ref(db, "allinformation");
     onValue(informationRef, (snapshot) => {
       // console.log(snapshot.val());
       // const data = snapshot.val();
       // updateStarCount(postElement, data);
-      let array = []
+      let array = [];
       snapshot.forEach((item) => {
         // console.log(item.val())
-        array.push({ ...item.val(), id: item.key })
-      })
+        array.push({ ...item.val(), id: item.key });
+      });
       setInformation(array);
     });
-  }, [])
+  }, []);
 
   //console.log(information);
 
   // delete Operation
   let handleDelete = (id) => {
     //console.log(id);
-    remove(ref(db, "allinformation/" + id)).then(() => (
-      console.log("delete done")
-    ))
-  }
+    remove(ref(db, "allinformation/" + id)).then(() =>
+      toast('🦄 Delete Done', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+    );
+  };
 
-  let handleAllDelete = () =>{
-    remove(ref(db, "allinformation")).then(() => (
-      console.log("delete All done")
-    ))
-  }
+  let handleAllDelete = () => {
+    remove(ref(db, "allinformation")).then(() =>
+      toast('🦄 Delete All Done', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+    );
+  };
 
   // update Operation
   let handleEdit = (item) => {
@@ -72,10 +100,10 @@ function App() {
       email: item.information_user.email,
       phone: item.information_user.phone,
       address: item.information_user.address,
-      password: item.information_user.password
-    })
+      password: item.information_user.password,
+    });
     setTogglebtn(true);
-  }
+  };
 
   let handleUpdate = (e) => {
     e.preventDefault();
@@ -90,13 +118,27 @@ function App() {
         email: "",
         phone: "",
         address: "",
-        password: ""
-      })
-    })
-  }
+        password: "",
+      });
+    });
+  };
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
       <div className="container">
         <span className="bg-animate"></span>
         <span className="bg-animate2"></span>
@@ -104,36 +146,70 @@ function App() {
           <h2>Registration</h2>
           <form action="">
             <div className="input-box">
-              <input name='name' value={user.name} type="text" onChange={handleForm} required />
+              <input
+                name="name"
+                value={user.name}
+                type="text"
+                onChange={handleForm}
+                required
+              />
               <label>Name</label>
-              <i className='bx bxs-user'></i>
+              <i className="bx bxs-user"></i>
             </div>
             <div className="input-box">
-              <input name='email' value={user.email} type="email" onChange={handleForm} required />
+              <input
+                name="email"
+                value={user.email}
+                type="email"
+                onChange={handleForm}
+                required
+              />
               <label>E-mail</label>
-              <i className='bx bxs-envelope'></i>
+              <i className="bx bxs-envelope"></i>
             </div>
             <div className="input-box">
-              <input name='phone' value={user.phone} type="phone" onChange={handleForm} required />
+              <input
+                name="phone"
+                value={user.phone}
+                type="phone"
+                onChange={handleForm}
+                required
+              />
               <label>Phone</label>
-              <i className='bx bxs-phone-call'></i>
+              <i className="bx bxs-phone-call"></i>
             </div>
             <div className="input-box">
-              <input name='address' value={user.address} type="text" onChange={handleForm} required />
+              <input
+                name="address"
+                value={user.address}
+                type="text"
+                onChange={handleForm}
+                required
+              />
               <label>Address</label>
-              <i className='bx bxs-location-plus' ></i>
+              <i className="bx bxs-location-plus"></i>
             </div>
             <div className="input-box">
-              <input name='password' value={user.password} type="password" onChange={handleForm} autoComplete='on' required />
+              <input
+                name="password"
+                value={user.password}
+                type="password"
+                onChange={handleForm}
+                autoComplete="on"
+                required
+              />
               <label>Password</label>
-              <i className='bx bxs-lock-alt' ></i>
+              <i className="bx bxs-lock-alt"></i>
             </div>
-            {
-              togglebtn
-                ? <button className="btn" onClick={handleUpdate}>Update</button>
-                :
-                <button className="btn" onClick={handleSubmit}>Registration</button>
-            }
+            {togglebtn ? (
+              <button className="btn" onClick={handleUpdate}>
+                Update
+              </button>
+            ) : (
+              <button className="btn" onClick={handleSubmit}>
+                Registration
+              </button>
+            )}
           </form>
         </div>
         <div className="info-text register">
@@ -142,29 +218,37 @@ function App() {
         </div>
       </div>
       <div className="user-list">
-        <div className="user-list-header">User List
-          <button className="delete-btn" onClick={handleAllDelete}>Delete All</button>
+        <div className="user-list-header">
+          User List
+          <button className="delete-btn" onClick={handleAllDelete}>
+            Delete All
+          </button>
         </div>
-        
+
         <ol>
-          {
-            information.map((item, index) => (
-              <li className="user-item" key={index}>
-                <span>Name: {item.information_user.name}</span>
-                <span>Phone: {item.information_user.phone}</span>
-                <span>Email: {item.information_user.email}</span>
-                <span>Address: {item.information_user.address}</span>
-                <div className="user-actions">
-                  <button className="edit-btn" onClick={() => handleEdit(item)}>Edit</button>
-                  <button className="delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
-                </div>
-              </li>
-            ))
-          }
+          {information.map((item, index) => (
+            <li className="user-item" key={index}>
+              <span>Name: {item.information_user.name}</span>
+              <span>Phone: {item.information_user.phone}</span>
+              <span>Email: {item.information_user.email}</span>
+              <span>Address: {item.information_user.address}</span>
+              <div className="user-actions">
+                <button className="edit-btn" onClick={() => handleEdit(item)}>
+                  Edit
+                </button>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(item.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
         </ol>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
